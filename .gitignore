@@ -1,2 +1,5 @@
 # Python:
 *.py[cod]
+
+
+tables/config.py
