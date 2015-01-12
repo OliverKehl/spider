@@ -3,3 +3,11 @@
 
 
 tables/config.py
+config.py
+
+data/
+
+
+.project
+.pydevproject
+.settings/

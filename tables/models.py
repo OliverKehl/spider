@@ -19,9 +19,7 @@ class ZidianInfo(Base):
 
 
 
-    
-    def __init__(self, zi = '', pinyin = '', bushou = '', 
-    bihua = 0,jieshi = '' ):
+    def __init__(self, zi = '', pinyin = '', bushou = '', bihua = 0,jieshi = '',zuci = '', zaoju = ''):
         self.zi = zi
         self.pinyin = pinyin
         self.bushou = bushou
@@ -38,6 +36,34 @@ class ZidianInfo(Base):
                                                                              self.jieshi,
                                                                              self.zuci,
                                                                              self.zaoju,
+                                                                             )
+
+class CidianInfo(Base):
+    __tablename__='dictionary'
+    
+    id = Column(Integer,primary_key=True)
+    word = Column(String(10),index = True)
+    pinyin = Column(String(30))
+    meaning = Column(String(200))
+    sentence = Column(String(100))
+    synonym = Column(String(10))
+    antonym = Column(String(10))
+    
+    def __init__(self,word='',pinyin='',meaning = None,sentence = None, synonym=None, antonym = None):
+        self.word = word
+        self.pinyin = pinyin
+        self.meaning = meaning
+        self.sentence = sentence
+        self.synonym = synonym
+        self.antonym = antonym
+        
+    def __repr__(self):
+        return "<Dictionary Info('%s','%s','%s','%s','%s','%s',%s','%s','%s')>" %(self.word,
+                                                                             self.pinyin,
+                                                                             self.meaning,
+                                                                             self.sentence,
+                                                                             self.synonym,
+                                                                             self.antonym,
                                                                              )
 
 def create_tables(dburl,echos=False):
