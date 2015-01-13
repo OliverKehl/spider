@@ -6,6 +6,11 @@ tables/config.py
 config.py
 
 
+#pydev
 .project
 .pydevproject
-.settings/
+.settings
+
+
+#pycharm
+.idea
