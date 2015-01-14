@@ -39,42 +39,53 @@ def extract_meaning(str):
         meaning.append(s.strip())
     return meaning,liju
 
-def extract_sentence(str):
+def extract_sentence(meta):
     index = str.find('[例句]')
     if index<0:
         return None
-    left = str.rfind('<li>',0,index)
-    right = str.find('</li>',index)
-    s = str[left:right]
-    s = filter(s)
+    left = meta.rfind('<li>',0,index)
+    right = meta.find('</li>',index)
+    meta = meta[left:right]
+    meta = filter(meta)
+    sens = meta.split('.')[0:-1]
+    for s in sens:
+        pass
+        
+#把gbk编码的字符串转换成utf8格式
+#response = response.decode('gbk').encode('utf-8')
 
+SIZE=1000
 
-def crawl(file):
-    f = open(file,'r')
+def crawl(filename):
+    f = open(filename,'r')
     session = DBSession()
-    for line in f.readlines():
-        line = line.strip()
-        url = 'http://hanyu.iciba.com/hy/'+line
-        req = urllib2.urlopen(url)
-        response = req.read()
-        
-        
-        #把gbk编码的字符串转换成utf8格式
-        #response = response.decode('gbk').encode('utf-8')
+    reserved_words=[]
+    not_exist_words = []
+    try:
+        for line in f.readlines():
+            line = line.strip()
+            url = 'http://hanyu.iciba.com/hy/'+line
+            req = urllib2.urlopen(url)
+            response = req.read()
 
-        #page jump
-        start = response.find('url')+4
-        end = response.rfind('shtml')+5
-        target = host + response[start:end]
-        req = urllib2.urlopen(target)
-        s = req.read()
-        start = s.find('[释义]')+8
-        end = s.find('div',start)
-        temp = s[start:end-1].strip()
-        print temp
-        try:
+            start = response.find('url')+4
+            end = response.rfind('shtml')+5
+            target = host + response[start:end]
+            req = urllib2.urlopen(target)
+            s = req.read()
+
+            shiyi = s.find('[释义]')
+            if shiyi==-1:
+                not_exist_words.append(line)
+                continue
+            reserved_words.append(line)
+
+            start = shiyi+8
+            end = s.find('div',start)
+            temp = s[start:end-1].strip()
+            print temp
+
             cidianInfo = CidianInfo()
-
             #word
             cidianInfo.word = line
 
@@ -96,12 +107,21 @@ def crawl(file):
             #synonym
 
             #antonym
+            session.add(cidianInfo)
+            count+=1
+            if count==SIZE:
+                session.commit()
+                count = 0
+                reserved_words=[]
+        session.commit()
+    except Exception,e:
+        print e
+        session.rollback()
+        #TODO log reserved_words
+    finally:
+        session.close()
 
-        except Exception,e:
-            pass
-
-
-        time.sleep(3)
+    time.sleep(3)
 
         
 

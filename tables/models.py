@@ -9,7 +9,7 @@ class ZidianInfo(Base):
     __tablename__='zidian'
     
     id = Column(Integer,primary_key=True)
-    zi = Column(String(2),index = True)
+    zi = Column(String(2), unique=True, index = True)
     pinyin = Column(String(10), index = True)
     bushou = Column(String(5), index = False)
     bihua = Column(Integer)
@@ -42,7 +42,7 @@ class CidianInfo(Base):
     __tablename__='dictionary'
     
     id = Column(Integer,primary_key=True)
-    word = Column(String(10),index = True)
+    word = Column(String(10), unique=True,index = True)
     tag = Column(String(5),index = True)
     pinyin = Column(String(30))
     meaning = Column(String(200))
