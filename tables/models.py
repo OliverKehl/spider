@@ -50,8 +50,9 @@ class CidianInfo(Base):
     synonym = Column(String(10))
     antonym = Column(String(10))
     
-    def __init__(self,word='',tag='',pinyin='',meaning = None,sentence = None, synonym=None, antonym = None):
+    def __init__(self,word='',tag='',pinyin='',meaning = '',sentence = '', synonym='', antonym = ''):
         self.word = word
+        self.tag = tag
         self.pinyin = pinyin
         self.meaning = meaning
         self.sentence = sentence
@@ -73,3 +74,5 @@ def create_tables(dburl,echos=False):
     Base.metadata.create_all(engine)
     engine.dispose()
 
+if __name__=='__main__':
+    create_tables('mysql+mysqldb://root:552523@localhost/cidian?charset=utf8')
