@@ -43,13 +43,14 @@ class CidianInfo(Base):
     
     id = Column(Integer,primary_key=True)
     word = Column(String(10),index = True)
+    tag = Column(String(5),index = True)
     pinyin = Column(String(30))
     meaning = Column(String(200))
     sentence = Column(String(100))
     synonym = Column(String(10))
     antonym = Column(String(10))
     
-    def __init__(self,word='',pinyin='',meaning = None,sentence = None, synonym=None, antonym = None):
+    def __init__(self,word='',tag='',pinyin='',meaning = None,sentence = None, synonym=None, antonym = None):
         self.word = word
         self.pinyin = pinyin
         self.meaning = meaning
@@ -58,8 +59,9 @@ class CidianInfo(Base):
         self.antonym = antonym
         
     def __repr__(self):
-        return "<Dictionary Info('%s','%s','%s','%s','%s','%s',%s','%s','%s')>" %(self.word,
-                                                                             self.pinyin,
+        return "<Dictionary Info('%s','%s','%s','%s','%s','%s','%s')>" %(self.word,
+                                                                            self.tag,
+                                                                            self.pinyin,
                                                                              self.meaning,
                                                                              self.sentence,
                                                                              self.synonym,
