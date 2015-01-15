@@ -135,7 +135,6 @@ def crawl(filename):
         print line
         if len(line.decode('utf8'))<2:
             continue
-<<<<<<< HEAD
         try:
             url = 'http://hanyu.iciba.com/hy/'+line
             req = urllib2.urlopen(url)
