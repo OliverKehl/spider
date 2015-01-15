@@ -131,66 +131,71 @@ def crawl(filename):
     cidianInfos = []
     count = 0
     for line in f.readlines()[1:]:
-        line = line.strip()        
+        line = line.strip()
+        print line
         if len(line.decode('utf8'))<2:
             continue
-        url = 'http://hanyu.iciba.com/hy/'+line
-        req = urllib2.urlopen(url)
-        response = req.read()
-
-        start = response.find('url')+4
-        end = response.rfind('shtml')+5
-        target = host + response[start:end]
-        req = urllib2.urlopen(target)
-        s = req.read()
-
-        shiyi = s.find('[释义]')
-        if shiyi==-1:
-            not_exist_words.append(line)
-            continue
-        reserved_words.append(line)
-
-        start = shiyi+8
-        end = s.find('div',start)
-        temp = s[start:end-1].strip()
-        print temp
-
-        cidianInfo = CidianInfo()
-        #word
-        cidianInfo.word = line
-        
-        #pinyin
-        cidianInfo.pinyin = extract_pinyin(s)
-        
-        #meaning and sentence
-        meanings,sentences = extract_meaning(temp[0:temp.find('</li>')-5])
-        cidianInfo.meaning = ''.join(meanings)
-        
-        #sentence
-        sentences2 = extract_sentence(s)
-        sentences.extend(sentences2)
-        cidianInfo.sentence = ''.join([t.replace('~',' '+line+' ') for t in sentences])
-        #print cidianInfo.sentence
-
-        #synonym
-        synonyms = extract_synonym(s)
-        cidianInfo.synonym = '.'.join(synonyms)
-        #print cidianInfo.synonym
-        
-        #antonym
-        antonyms = extract_antonym(s)
-        cidianInfo.antonym = '.'.join(antonyms)
-        print cidianInfo.antonym
-        
-        count+=1
-        cidianInfos.append(cidianInfo)
-        if count==SIZE:
-            addToDB(cidianInfos,reserved_words)
-            count = 0
-            reserved_words=[]
-            cidianInfos = []
-
-        time.sleep(2)
+        try:
+            url = 'http://hanyu.iciba.com/hy/'+line
+            req = urllib2.urlopen(url)
+            temp_str = req.url
+            if temp_str.find('http://hanyu.iciba.com/hy/')<0:
+                not_exist_words.append(line)
+                continue
+            response = req.read()
+    
+            start = response.find('url')+4
+            end = response.rfind('shtml')+5
+            target = host + response[start:end]
+            req = urllib2.urlopen(target)
+            s = req.read()
+    
+            shiyi = s.find('[释义]')
+            if shiyi==-1:
+                not_exist_words.append(line)
+                continue
+            reserved_words.append(line)
+    
+            start = shiyi+8
+            end = s.find('div',start)
+            temp = s[start:end-1].strip()
+    
+            cidianInfo = CidianInfo()
+            #word
+            cidianInfo.word = line
+            
+            #pinyin
+            cidianInfo.pinyin = extract_pinyin(s)
+            
+            #meaning and sentence
+            meanings,sentences = extract_meaning(temp[0:temp.find('</li>')-5])
+            cidianInfo.meaning = ''.join(meanings)
+            
+            #sentence
+            sentences2 = extract_sentence(s)
+            sentences.extend(sentences2)
+            cidianInfo.sentence = ''.join([t.replace('~',' '+line+' ') for t in sentences])
+            #print cidianInfo.sentence
+    
+            #synonym
+            synonyms = extract_synonym(s)
+            cidianInfo.synonym = '.'.join(synonyms)
+            #print cidianInfo.synonym
+            
+            #antonym
+            antonyms = extract_antonym(s)
+            cidianInfo.antonym = '.'.join(antonyms)
+            
+            count+=1
+            cidianInfos.append(cidianInfo)
+            if count==SIZE:
+                addToDB(cidianInfos,reserved_words)
+                count = 0
+                reserved_words=[]
+                cidianInfos = []
+            time.sleep(1)
+        except Exception , e:
+            print e
     addToDB(cidianInfos,reserved_words)
 
 def addToDB(cidianInfos,words):
