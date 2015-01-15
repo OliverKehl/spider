@@ -2,7 +2,6 @@
 __author__='kehl'
 
 import urllib2
-import config
 from tables.models import CidianInfo
 from tables import DBSession
 import time
@@ -207,7 +206,6 @@ def addToDB(cidianInfos,words):
 
 if __name__=='__main__':
     import os,sys
-    #print os.path.dirname(os.getcwd())+'/data/vocab.txt'
     crawl(os.path.dirname(os.getcwd())+'/data/vocab.txt')
         
         

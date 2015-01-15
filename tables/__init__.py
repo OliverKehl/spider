@@ -1,4 +1,7 @@
 # coding:utf-8
+import sys,os
+sys.path.append(os.path.dirname(os.getcwd()))
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
