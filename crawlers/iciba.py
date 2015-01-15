@@ -135,6 +135,7 @@ def crawl(filename):
         print line
         if len(line.decode('utf8'))<2:
             continue
+<<<<<<< HEAD
         try:
             url = 'http://hanyu.iciba.com/hy/'+line
             req = urllib2.urlopen(url)
@@ -200,7 +201,6 @@ def crawl(filename):
 
 def addToDB(cidianInfos,words):
     session = DBSession()
-    print cidianInfos.__class__
     try:
         for info in cidianInfos:
             session.add(info)
