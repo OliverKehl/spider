@@ -130,8 +130,10 @@ def crawl(filename):
     not_exist_words = []
     cidianInfos = []
     count = 0
-    for line in f.readlines():
-        line = line.strip()
+    for line in f.readlines()[1:]:
+        line = line.strip()        
+        if len(line.decode('utf8'))<2:
+            continue
         url = 'http://hanyu.iciba.com/hy/'+line
         req = urllib2.urlopen(url)
         response = req.read()
@@ -210,5 +212,6 @@ def addToDB(cidianInfos,words):
 if __name__=='__main__':
     import os,sys
     crawl(os.path.dirname(os.getcwd())+'/data/vocab.txt')
+    
         
         
