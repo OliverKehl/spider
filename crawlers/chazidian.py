@@ -1,6 +1,8 @@
 # coding:utf-8
 import urllib2
 import urllib
+import sys,os
+sys.path.append(os.path.dirname(os.getcwd()))
 
 import config
 def crawl(file):
