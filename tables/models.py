@@ -2,6 +2,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column,Integer,String,Boolean,DateTime
+import config
 
 Base = declarative_base()
 
@@ -13,9 +14,9 @@ class ZidianInfo(Base):
     pinyin = Column(String(10), index = True)
     bushou = Column(String(5), index = False)
     bihua = Column(Integer)
-    jieshi = Column(String(500), index = True)
+    jieshi = Column(String(200), index = True)
     zuci = Column(String(100)) #组词
-    zaoju = Column(String(300))
+    zaoju = Column(String(200))
 
 
 
@@ -75,4 +76,4 @@ def create_tables(dburl,echos=False):
     engine.dispose()
 
 if __name__=='__main__':
-    create_tables('mysql+mysqldb://root:552523@localhost/cidian?charset=utf8')
+    create_tables(config.sqlalchemy_zidian_url)

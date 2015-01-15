@@ -92,6 +92,14 @@ def extract_antonym(meta):
             antonyms.append(syn[i])
     return antonyms   
 
+#<div class="js12"><font color="#008097">ài qíng</font>
+def extract_pinyin(meta):
+    left = meta.find('class=\"js12\">')
+    right = meta.find('</font>',left)
+    temp = meta[left:right]
+    left = temp.rfind('>')
+    return temp[left+1:]
+
 #把gbk编码的字符串转换成utf8格式
 #response = response.decode('gbk').encode('utf-8')
 
@@ -146,7 +154,10 @@ def crawl(filename):
         cidianInfo = CidianInfo()
         #word
         cidianInfo.word = line
-
+        
+        #pinyin
+        cidianInfo.pinyin = extract_pinyin(s)
+        
         #meaning and sentence
         meanings,sentences = extract_meaning(temp[0:temp.find('</li>')-5])
         cidianInfo.meaning = ''.join(meanings)
@@ -178,7 +189,6 @@ def crawl(filename):
         time.sleep(2)
     addToDB(cidianInfos,reserved_words)
 
-
 def addToDB(cidianInfos,words):
     session = DBSession()
     print cidianInfos.__class__
@@ -186,10 +196,8 @@ def addToDB(cidianInfos,words):
         for info in cidianInfos:
             session.add(info)
             session.commit()
-        
     except Exception,e:
         #TODO log reserved_words
-        
         print e
         session.rollback()
     finally:
