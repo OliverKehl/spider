@@ -153,7 +153,6 @@ def crawl(filename):
         start = shiyi+8
         end = s.find('div',start)
         temp = s[start:end-1].strip()
-        print temp
 
         cidianInfo = CidianInfo()
         #word
@@ -180,7 +179,6 @@ def crawl(filename):
         #antonym
         antonyms = extract_antonym(s)
         cidianInfo.antonym = '.'.join(antonyms)
-        print cidianInfo.antonym
         
         count+=1
         cidianInfos.append(cidianInfo)
@@ -195,7 +193,6 @@ def crawl(filename):
 
 def addToDB(cidianInfos,words):
     session = DBSession()
-    print cidianInfos.__class__
     try:
         for info in cidianInfos:
             session.add(info)
