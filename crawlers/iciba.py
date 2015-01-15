@@ -206,6 +206,8 @@ def addToDB(cidianInfos,words):
     
 
 if __name__=='__main__':
-    crawl('/home/kehl/vocabs.txt')
+    import os,sys
+    #print os.path.dirname(os.getcwd())+'/data/vocab.txt'
+    crawl(os.path.dirname(os.getcwd())+'/data/vocab.txt')
         
         
