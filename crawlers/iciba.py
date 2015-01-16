@@ -193,10 +193,14 @@ def crawl(filename):
                 count = 0
                 reserved_words=[]
                 cidianInfos = []
-            time.sleep(1)
+            time.sleep(3)
         except Exception , e:
             print e
     addToDB(cidianInfos,reserved_words)
+    f.close()
+    f = open('unfind_vocab.txt','w')
+    f.writelines('\n'.join(not_exist_words))
+    f.close()
 
 def addToDB(cidianInfos,words):
     session = DBSession()
