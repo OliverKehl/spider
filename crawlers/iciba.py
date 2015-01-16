@@ -132,7 +132,6 @@ def crawl(filename):
     count = 0
     for line in f.readlines()[1:]:
         line = line.strip()
-        print line
         if len(line.decode('utf8'))<2:
             continue
         try:
@@ -189,7 +188,9 @@ def crawl(filename):
             count+=1
             cidianInfos.append(cidianInfo)
             if count==SIZE:
-                addToDB(cidianInfos,reserved_words)
+                signal = addToDB(cidianInfos)
+                if not signal:
+                    not_exist_words.extend(reserved_words)
                 count = 0
                 reserved_words=[]
                 cidianInfos = []
@@ -202,16 +203,18 @@ def crawl(filename):
     f.writelines('\n'.join(not_exist_words))
     f.close()
 
-def addToDB(cidianInfos,words):
+def addToDB(cidianInfos):
     session = DBSession()
     try:
         for info in cidianInfos:
             session.add(info)
             session.commit()
+            return True
     except Exception,e:
         #TODO log reserved_words
         print e
         session.rollback()
+        return False
     finally:
         session.close()
         
