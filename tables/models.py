@@ -73,10 +73,39 @@ class CidianInfo(Base):
                                                                              self.antonym,
                                                                              )
 
+class PoemInfo(Base):
+    __tablename__='poems'
+
+    id = Column(Integer,primary_key=True)
+    title = Column(String(50), index = True)
+    author = Column(String(20),index = True)
+    category = Column(String(20))#唐诗，宋词，元曲等
+    era = Column(String(16))
+    content = Column(String(600))
+
+    def __init__(self,title='',author='',category='',era = '',content = ''):
+        self.title = title
+        self.author = author
+        self.category = category
+        self.era = era
+        self.content = content
+
+    def __repr__(self):
+        return "<Poem Info('%s','%s','%s','%s','%s')>" %(self.title,
+                                                            self.author,
+                                                            self.category,
+                                                            self.era,
+                                                            self.content,
+        )
+
 def create_tables(dburl,echos=False):
-    engine = create_engine(dburl,echo=echos)
+    engine = create_engine(dburl,echo=True)
     Base.metadata.create_all(engine)
     engine.dispose()
 
 if __name__=='__main__':
     create_tables(config.sqlalchemy_zidian_url)
+    #engine = create_engine(config.sqlalchemy_zidian_url,echo=True)
+    #PoemInfo.metadata.create_all(engine)
+    #Base.metadata.create_all(engine)
+    #engine.dispose()

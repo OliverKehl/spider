@@ -105,7 +105,6 @@ def extract_pinyin(meta):
 #把gbk编码的字符串转换成utf8格式
 #response = response.decode('gbk').encode('utf-8')
 
-SIZE=1000
 
 '''
 
@@ -123,6 +122,7 @@ SIZE=1000
 起 积极 作用.他对社会工作一向 积极 .
 
 '''
+SIZE=20
 
 def crawl(filename):
     f = open(filename,'r')
@@ -132,7 +132,6 @@ def crawl(filename):
     count = 0
     for line in f.readlines()[1:]:
         line = line.strip()
-        print line
         if len(line.decode('utf8'))<2:
             continue
         try:
@@ -142,6 +141,7 @@ def crawl(filename):
             if temp_str.find('http://hanyu.iciba.com/hy/')<0:
                 not_exist_words.append(line)
                 continue
+            #print line
             response = req.read()
     
             start = response.find('url')+4
@@ -189,25 +189,34 @@ def crawl(filename):
             count+=1
             cidianInfos.append(cidianInfo)
             if count==SIZE:
-                addToDB(cidianInfos,reserved_words)
+                signal = addToDB(cidianInfos)
+                if not signal:
+                    not_exist_words.extend(reserved_words)
                 count = 0
                 reserved_words=[]
                 cidianInfos = []
-            time.sleep(1)
+            time.sleep(3)
         except Exception , e:
-            print e
+            pass
+            #print e
     addToDB(cidianInfos,reserved_words)
+    f.close()
+    f = open('unfind_vocab.txt','w')
+    f.writelines('\n'.join(not_exist_words))
+    f.close()
 
-def addToDB(cidianInfos,words):
+def addToDB(cidianInfos):
     session = DBSession()
     try:
         for info in cidianInfos:
             session.add(info)
             session.commit()
+        return True
     except Exception,e:
         #TODO log reserved_words
-        print e
+        #print e
         session.rollback()
+        return False
     finally:
         session.close()
         
@@ -216,6 +225,3 @@ def addToDB(cidianInfos,words):
 if __name__=='__main__':
     import os,sys
     crawl(os.path.dirname(os.getcwd())+'/data/vocab.txt')
-    
-        
-        
