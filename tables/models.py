@@ -108,4 +108,4 @@ if __name__=='__main__':
     #engine = create_engine(config.sqlalchemy_zidian_url,echo=True)
     #PoemInfo.metadata.create_all(engine)
     #Base.metadata.create_all(engine)
-    engine.dispose()
+    #engine.dispose()
