@@ -105,7 +105,6 @@ def extract_pinyin(meta):
 #把gbk编码的字符串转换成utf8格式
 #response = response.decode('gbk').encode('utf-8')
 
-SIZE=1000
 
 '''
 
@@ -123,6 +122,7 @@ SIZE=1000
 起 积极 作用.他对社会工作一向 积极 .
 
 '''
+SIZE=20
 
 def crawl(filename):
     f = open(filename,'r')
@@ -141,6 +141,7 @@ def crawl(filename):
             if temp_str.find('http://hanyu.iciba.com/hy/')<0:
                 not_exist_words.append(line)
                 continue
+            #print line
             response = req.read()
     
             start = response.find('url')+4
@@ -196,7 +197,8 @@ def crawl(filename):
                 cidianInfos = []
             time.sleep(3)
         except Exception , e:
-            print e
+            pass
+            #print e
     addToDB(cidianInfos,reserved_words)
     f.close()
     f = open('unfind_vocab.txt','w')
@@ -209,10 +211,10 @@ def addToDB(cidianInfos):
         for info in cidianInfos:
             session.add(info)
             session.commit()
-            return True
+        return True
     except Exception,e:
         #TODO log reserved_words
-        print e
+        #print e
         session.rollback()
         return False
     finally:
@@ -223,6 +225,3 @@ def addToDB(cidianInfos):
 if __name__=='__main__':
     import os,sys
     crawl(os.path.dirname(os.getcwd())+'/data/vocab.txt')
-    
-        
-        

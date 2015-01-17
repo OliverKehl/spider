@@ -104,8 +104,8 @@ def create_tables(dburl,echos=False):
     engine.dispose()
 
 if __name__=='__main__':
-    #create_tables(config.sqlalchemy_zidian_url)
-    engine = create_engine(config.sqlalchemy_zidian_url,echo=True)
-    PoemInfo.metadata.create_all(engine)
+    create_tables(config.sqlalchemy_zidian_url)
+    #engine = create_engine(config.sqlalchemy_zidian_url,echo=True)
+    #PoemInfo.metadata.create_all(engine)
     #Base.metadata.create_all(engine)
     engine.dispose()
