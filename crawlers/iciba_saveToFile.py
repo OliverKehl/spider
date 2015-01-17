@@ -31,9 +31,10 @@ def crawlToFile(filename):
     not_exist_words = []
     cidianInfos = []
     count = 0
-    for line in f.readlines()[1:]:
+    lines = f.readlines()[1:]
+    for i in range(len(lines)):
+        line = lines[i]
         line = line.strip()
-        print line
         if len(line.decode('utf8'))<2:
             continue
         try:
@@ -55,16 +56,16 @@ def crawlToFile(filename):
             if shiyi==-1:
                 not_exist_words.append(line)
                 continue
-            f2 = open('output/'+line+'.txt','w')
+            f2 = open('output/'+str(i)+'.txt','w')
             f2.writelines(s)
             f2.close()
             time.sleep(3)
         except Exception , e:
-            print e
-
+            pass
+    f.close()
 if __name__=='__main__':
     import os,sys
-    crawl(os.path.dirname(os.getcwd())+'/data/vocab.txt')
+    crawlToFile(os.path.dirname(os.getcwd())+'/data/vocab.txt')
     
         
         

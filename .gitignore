@@ -14,3 +14,5 @@ config.py
 
 #pycharm
 .idea
+
+crawlers/output/
